@@ -1,6 +1,6 @@
 import requests
 import json
-from fetch_auction_data import fetch_auction_data
+from fetch_auction_data import fetch_auction_data, MSK_members
 
 
 def Signin():
@@ -45,11 +45,13 @@ def FetchOrderData(item_name, mod_rank):
     # print(json.dumps(response.json(), indent=1))
     if mod_rank > 0:
         sell_orders = [sell_order for sell_order in response.json()["payload"]["orders"] if
-                       sell_order["order_type"] == "sell" and sell_order["user"]["status"] == 'ingame' and sell_order["mod_rank"] == mod_rank]
+                       sell_order["order_type"] == "sell" and sell_order["user"]["status"] == 'ingame'
+                       and not sell_order["user"]["ingame_name"] in MSK_members and sell_order["mod_rank"] == mod_rank]
 
     else:
         sell_orders = [sell_order for sell_order in response.json()["payload"]["orders"] if
-                       sell_order["order_type"] == "sell" and sell_order["user"]["status"] == 'ingame']
+                       sell_order["order_type"] == "sell" and sell_order["user"]["status"] == 'ingame'
+                       and not sell_order["user"]["ingame_name"] in MSK_members]
 
     # print(json.dumps(sell_orders, indent=1))
     sorted_sell_orders = sorted(sell_orders, key=lambda x: x['platinum'])
@@ -128,8 +130,8 @@ while True:
             item_id = order['id']
             print(new_price)
 
-            if new_price != order['platinum']:
-                response = UpdateOrders(new_price, item_id)
+            if new_price != order['platinum'] - 1:
+                response = UpdateOrders(new_price - 1, item_id)
 
                 # Check if the UpdateOrders was successful
                 if response.ok:
@@ -151,7 +153,7 @@ while True:
     # Check if the GetRivenAuctions was successful
     if response.ok:
         # Extract your auction listings from the response
-        auctions = response.json()['payload']['auctions']
+        auctions = [auction for auction in response.json()['payload']['auctions'] if auction["item"]["mod_rank"] == 0]
 
         # Print the auction listings
         print(f"You have {len(auctions)} auctions:")
@@ -166,21 +168,21 @@ while True:
                 f"- {auction['item']['weapon_url_name']} {auction['item']['name']} (id: {auction['id']}, price: {auction['buyout_price']} platinum)")
             # print(json.dumps(auction, indent=1))
 
-            if new_price != auction['buyout_price'] and auction["item"]["mod_rank"] == 0:
-                response = UpdateRivenAuction(new_price, weapon_id)
+            if new_price != auction['buyout_price'] - 1:
+                response = UpdateRivenAuction(new_price - 1, weapon_id)
 
                 # Check if the UpdateRivenAuctions was successful
                 if response.ok:
                     # Print the auction details
                     # print(json.dumps(response.json(), indent=1))
                     auction_data = json.loads(response.text)["payload"]["auction"]
-                    print(f"Auction updated! name: {auction_data['item']['weapon_url_name']} {auction_data['item']['name']}, price: {auction_data['buyout_price']}")
+                    print(
+                        f"Auction updated! name: {auction_data['item']['weapon_url_name']} {auction_data['item']['name']}, price: {auction_data['buyout_price']}")
                 else:
                     print(f'Error updating auction: {response.json()["error"]}')
-            elif auction["item"]["mod_rank"] > 0:
-                print(f"Not a direct sell auction")
             else:
                 print("Already cheapest auction")
     else:
         print(f'GetRivenAuctions failed with error: {response.json()["error"]}')
         break
+    break
