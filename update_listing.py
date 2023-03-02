@@ -63,7 +63,6 @@ def UpdateOrders(price, order_id):
     data = {
         "order_id": f"{order_id}",
         "platinum": price,
-        "quantity": 1,
         "visible": "true"
     }
 
@@ -79,11 +78,12 @@ def UpdateOrders(price, order_id):
 
 
 def UpdateRivenAuction(price, auction_id):
-    url = f'https://api.warframe.market/v1/profile/auctions/{auction_id}'
+    url = f'https://api.warframe.market/v1/auctions/entry/{auction_id}'
 
     data = {
         "order_id": f"{auction_id}",
         "buyout_price": price,
+        "starting_price": price,
         "visible": "true"
     }
     headers = {
@@ -93,7 +93,7 @@ def UpdateRivenAuction(price, auction_id):
         "platform": "pc",
         "auth_type": "header"}
 
-    response = requests.put(url, headers=headers)
+    response = requests.put(url, json=data, headers=headers)
     return response
 
 
@@ -172,8 +172,9 @@ while True:
                 # Check if the UpdateRivenAuctions was successful
                 if response.ok:
                     # Print the auction details
-                    auction_data = json.loads(response.text)["auction"]
-                    print(f"Auction updated! ID: {auction_data['id']}, URL: {auction_data['url']}")
+                    # print(json.dumps(response.json(), indent=1))
+                    auction_data = json.loads(response.text)["payload"]["auction"]
+                    print(f"Auction updated! name: {auction_data['item']['weapon_url_name']} {auction_data['item']['name']}, price: {auction_data['buyout_price']}")
                 else:
                     print(f'Error updating auction: {response.json()["error"]}')
             elif auction["item"]["mod_rank"] > 0:
