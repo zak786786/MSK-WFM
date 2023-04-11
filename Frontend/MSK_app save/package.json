@@ -1,0 +1,16 @@
+{
+  "name": "msk",
+  "productName": "MSK app",
+  "version": "1.0.0",
+  "description": "app to dominate the market",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Midsummer Knights",
+  "license": "ISC",
+  "dependencies": {
+    "ionicons": "^7.1.0",
+    "toastify-js": "^1.12.0"
+  }
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Content-Security-Policy" content = "script-src 'self' ">
+    <title>MSK app</title>
+    <link rel="stylesheet" href="style.css">
+	
+</head>
+<body>
+    <header>
+		<h2 class="logo"><img src = "msklogoeditwhite.png"></h2>
+		<nav class="navigation">
+		<button class = "button_0">Home</button>
+		<button class = "button_1">Auto-listing</button>
+		<button class = "button_2">button2</button>
+		<button class = "button_3">button3</button>
+		<button class = "btnLogin-popup">Login</button>
+		
+		
+
+		</nav>
+	</header>
+	<div class= "wrapper">
+		<span class="icon-close">
+			<img src="x.svg">
+		</span>
+		<div class="form-box login">
+			<h2>Warframe market login</h2>
+			<form action="#">
+				<div class="input-box">
+					<input type="username" required>
+					<label>Email</label>
+				</div>
+				<div class="input-box">
+					
+					<input type="password" required>
+					<label>Password</label>
+				</div>
+				<div class="remember">
+					<label><input type="checkbox">Remember me</label>
+					
+
+				</div>
+				<button type="submit" class="btn">Save</button>
+				
+			</form>
+
+		</div>
+	</div>
+	<div class= "second_page">
+		<div class="window">
+			<h2>Auto-listing</h2>
+			<form>
+				<div class="auto_listing_box"></div>
+			
+				<button class="auto_listing_start" role="submit">Start</button>
+				<button class="auto_listing_stop" role="submit">Stop</button>
+				<div id="print-content">
+  				<h1>My Commands or Notes</h1>
+  				<p>This is an example of printing commands or notes to the user.</p>
+				</div>
+				
+			</form>	
+		</div>
+			
+	</div>
+	
+	<script src="dashboard.js"></script>  
+</body>
+</html>
