@@ -2,7 +2,7 @@ import requests
 import json
 from fetch_auction_data import fetch_auction_data, MSK_members
 
-
+#
 def Signin():
     with open("wfm.txt", "r") as f:
         lines = f.read().splitlines()
